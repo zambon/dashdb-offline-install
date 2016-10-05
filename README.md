@@ -27,7 +27,7 @@ The Docker bundle file (`docker-offline.tar`) contains all system packages requi
 
 If you chose to download the Docker bundler, skip to the [Prepare Lab Server](#prepare-lab-server) section.
 
-### Prepare Build Server
+### Prepare the Build Server
 
 1.  Update system and install dependencies. (ETD: ~3 min)
     ```shell
@@ -68,7 +68,7 @@ EOF
     ```
 
 
-### Create Docker Bundle
+### Create the Docker Bundle
 
 1.  Create work directory.
 
@@ -86,7 +86,7 @@ EOF
     cat docker-offline/docker/.packages | xargs yumdownloader --destdir docker-offline/docker
     ```
 
-1.  Create Yum repository.
+1.  Create local Yum repository.
 
     ```shell
     createrepo --database docker-offline/docker
@@ -97,20 +97,21 @@ EOF
     ```shell
     sudo docker save hello-world:latest | \
       gzip -9 > docker-offline/images/hello-world__latest.tgz
+
     sudo docker save ibmdashdb/local:latest-linux | \
       gzip -9 > docker-offline/images/ibmdashdb_local__latest_linux.tgz
     ```
 
-1.  Create bundle.
+1.  Create the Docker bundle file.
 
     ```shell
     tar cvf docker-offline.tar docker-offline/
     ```
 
-1.  Finally, transfer the `docker-offline.tar` file over to the lab server.
+1.  Finally, transfer `docker-offline.tar` over to the lab server.
 
 
-## Prepare Lab Server
+## Prepare the Lab Server
 
 1.  Extract files from bundle.
 
@@ -159,7 +160,7 @@ EOF
 
 Follow the instructions below. You can find detailed instructions at [https://hub.docker.com/r/ibmdashdb/local/](https://hub.docker.com/r/ibmdashdb/local/).
 
-1.  Create data directory and `options` file.
+1.  Create the data directory and the `options` file.
 
     ```shell
     mkdir -p /mnt/clusterfs
@@ -170,7 +171,7 @@ Follow the instructions below. You can find detailed instructions at [https://hu
 
     ```
 
-1.  Deploy IBM dashDB Local.
+1.  Deploy IBM dashDB Local and tail its log.
 
     ```shell
     docker run -d -it \
@@ -180,7 +181,7 @@ Follow the instructions below. You can find detailed instructions at [https://hu
       -v /mnt/clusterfs:/mnt/bludata0 \
       -v /mnt/clusterfs:/mnt/blumeta0 \
       ibmdashdb/local:latest-linux \
-    date +%s
+
     docker logs -f dashDB
     ```
 
