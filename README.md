@@ -1,23 +1,31 @@
 # IBM dashDB Local Offline Installation
 
+There are essentially two steps required for an offline installation:
+
+1.  Downloading or building the Docker bundle
+1.  Preparing a server for deploying IBM dashDB Local
+
+The Docker bundle file (`docker-offline.tar`) contains all system packages required for installing Docker, as well as the IBM dashDB Local Docker image. Its size is approximately 3 GB, and it takes approximately 30 minutes to build it, depending on your build server specs.
+
 ## Prerequisites
 
-* **[Optional]** Access to [https://hub.docker.com/r/ibmdashdb/local/](https://hub.docker.com/r/ibmdashdb/local/).
+* **[Required if building]** Access to [https://hub.docker.com/r/ibmdashdb/local/](https://hub.docker.com/r/ibmdashdb/local/).
 
-* **[Optional]** Build server - used to build the Docker bundle
+* **[Required if building]** Build server
   * RHEL 7
   * 3.10+ kernel
   * internet access
   * admin access
 
-* **[Required]** Lab server - runs IBM dashDB Local
+* Lab server
   * RHEL 7
   * 3.10+ kernel
   * no internet access
   * admin access
 
+## Obtain Docker Bundle
 
-## Prepare Docker Bundle
+If you chose to download the Docker bundler, skip to the [Prepare Lab Server](#prepare-lab-server) section.
 
 ### Prepare Build Server
 
@@ -97,7 +105,7 @@ EOF
     tar cvf docker-offline.tar docker-offline/
     ```
 
-1.  Finally, transfer the 'docker-offline.tar' file over to the lab server.
+1.  Finally, transfer the `docker-offline.tar` file over to the lab server.
 
 
 ## Prepare Lab Server
@@ -153,20 +161,50 @@ EOF
 
 Follow the instructions below. You can find detailed instructions at [https://hub.docker.com/r/ibmdashdb/local/](https://hub.docker.com/r/ibmdashdb/local/).
 
-```shell
-mkdir -p /mnt/clusterfs
+1.  Create data directory and `options` file.
 
-touch /mnt/clusterfs/options
-sed -i.$(date +%s).bkp -E "/^ENABLE_ORACLE_COMPATIBILITY/d" /mnt/clusterfs/options
-echo "ENABLE_ORACLE_COMPATIBILITY='YES'" >> /mnt/clusterfs/options
+    ```shell
+    mkdir -p /mnt/clusterfs
 
-docker run -d -it \
-  --privileged=true \
-  --net=host \
-  --name=dashDB \
-  -v /mnt/clusterfs:/mnt/bludata0 \
-  -v /mnt/clusterfs:/mnt/blumeta0 \
-  ibmdashdb/local:latest-linux \
-date +%s
-docker logs -f dashDB
-```
+    touch /mnt/clusterfs/options
+    sed -i.$(date +%s).bkp -E "/^ENABLE_ORACLE_COMPATIBILITY/d" /mnt/clusterfs/options
+    echo "ENABLE_ORACLE_COMPATIBILITY='YES'" >> /mnt/clusterfs/options
+
+    ```
+
+1.  Deploy IBM dashDB Local.
+
+    ```shell
+    docker run -d -it \
+      --privileged=true \
+      --net=host \
+      --name=dashDB \
+      -v /mnt/clusterfs:/mnt/bludata0 \
+      -v /mnt/clusterfs:/mnt/blumeta0 \
+      ibmdashdb/local:latest-linux \
+    date +%s
+    docker logs -f dashDB
+    ```
+
+1.  After several minutes, the following message will be logged.
+
+    ```
+    ***********************************************************
+    *******             Congratulations!             **********
+    **         You have successfully deployed dashDB         **
+    ***********************************************************
+    ```
+
+1.  Hit `ctrl-c` to exit the log and run the command below to change your password.
+
+    ```shell
+    docker exec -it dashDB setpass <NEW_PASSWORD>
+    ```
+
+1.  Access the web console.
+
+    ```
+    URL:      https://<LAB_SERVER_IP_ADDRESS>:8443
+    username: bluadmin
+    password: <NEW_PASSWORD>
+    ```
