@@ -23,7 +23,7 @@ The Docker bundle file (`docker-offline.tar`) contains all system packages requi
   * no internet access
   * admin access
 
-## Obtain Docker Bundle
+## Obtain the Docker Bundle
 
 If you chose to download the Docker bundler, skip to the [Prepare Lab Server](#prepare-lab-server) section.
 
