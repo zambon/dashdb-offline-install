@@ -79,9 +79,9 @@ EOF
 1.  Download Docker Engine's package and its dependencies. (ETD: 15 min)
 
     ```shell
-    sudo repoquery --tree-requires --resolve $(sudo rpm -qa) \
-      | sed -E 's/(\[.*\]|\||\s|\\\_)//g' \
-      | sort | uniq > docker-offline/docker/.packages
+    sudo repoquery --tree-requires --resolve $(sudo rpm -qa) | \
+      sed -E 's/(\[.*\]|\||\s|\\\_)//g' | \
+      sort | uniq > docker-offline/docker/.packages
 
     cat docker-offline/docker/.packages | xargs yumdownloader --destdir docker-offline/docker
     ```
@@ -95,8 +95,10 @@ EOF
 1.  Save Docker images to files. (ETD: 15 min)
 
     ```shell
-    sudo docker save hello-world:latest | gzip -9 > docker-offline/images/hello-world__latest.tgz
-    sudo docker save ibmdashdb/local:latest-linux | gzip -9 > docker-offline/images/ibmdashdb_local__latest_linux.tgz
+    sudo docker save hello-world:latest | \
+      gzip -9 > docker-offline/images/hello-world__latest.tgz
+    sudo docker save ibmdashdb/local:latest-linux | \
+      gzip -9 > docker-offline/images/ibmdashdb_local__latest_linux.tgz
     ```
 
 1.  Create bundle.
@@ -134,10 +136,6 @@ EOF
 1.  Install Docker Engine.
 
     ```shell
-    ## sudo rpm -Uvh --replacefiles docker-offline/docker/*.rpm
-    ## sudo yum install -y docker-offline/docker/*.rpm
-
-
     sudo yum install -y docker-engine
     sudo systemctl enable docker.service
     sudo systemctl start docker
@@ -201,7 +199,7 @@ Follow the instructions below. You can find detailed instructions at [https://hu
     docker exec -it dashDB setpass <NEW_PASSWORD>
     ```
 
-1.  Access the web console.
+1.  IBM dashDB Local is ready for use.
 
     ```
     URL:      https://<LAB_SERVER_IP_ADDRESS>:8443
