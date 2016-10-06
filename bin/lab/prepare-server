@@ -9,8 +9,8 @@ ls docker-offline.tar > /dev/null
 tar xvf docker-offline.tar
 
 # Setup Yum repository
-mkdir -p /var/local/yum
-mv docker-offline/docker /var/local/yum
+sudo mkdir -p /var/local/yum
+sudo mv docker-offline/docker /var/local/yum
 
 sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
 [docker]

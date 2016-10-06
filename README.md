@@ -122,8 +122,8 @@ EOF
 1.  Setup Yum repository.
 
     ```shell
-    mkdir -p /var/local/yum
-    mv docker-offline/docker /var/local/yum
+    sudo mkdir -p /var/local/yum
+    sudo mv docker-offline/docker /var/local/yum
 
     sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
 [docker]
