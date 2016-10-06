@@ -145,14 +145,14 @@ EOF
 1.  Test Docker Engine.
 
     ```shell
-    docker load -i docker-offline/images/hello-world__latest.tgz
-    docker run --rm hello-world
+    sudo docker load -i docker-offline/images/hello-world__latest.tgz
+    sudo docker run --rm hello-world
     ```
 
 1.  Load IBM dashDB Local image. (ETD: 3 min)
 
     ```shell
-    docker load -i docker-offline/images/ibmdashdb_local__latest_linux.tgz
+    sudo docker load -i docker-offline/images/ibmdashdb_local__latest_linux.tgz
     ```
 
 
