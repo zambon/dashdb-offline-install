@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# -e  Exit immediately if a command exits with a non-zero status.
+# -x  Print commands and their arguments as they are executed.
+set -ex
+
+# Create work directory
+mkdir -p docker-offline/{docker,images}
+
+# Download Docker Engine's package and its dependencies. (ETD: 15 min)
+# Word splitting intended
+# shellcheck disable=SC2046
+sudo repoquery --tree-requires --resolve $(sudo rpm -qa) | \
+  sed -E 's/(\[.*\]|\||\s|\\\_)//g' | \
+  sort | uniq > docker-offline/docker/.packages
+
+cat docker-offline/docker/.packages | \
+  xargs yumdownloader --destdir docker-offline/docker
+
+# Create local Yum repository
+createrepo --database docker-offline/docker
+
+# Save Docker images to files
+sudo docker save hello-world:latest | \
+  gzip -9 > docker-offline/images/hello-world__latest.tgz
+
+sudo docker save ibmdashdb/local:latest-linux | \
+  gzip -9 > docker-offline/images/ibmdashdb_local__latest_linux.tgz
+
+# Create the Docker bundle file
+tar cvf docker-offline.tar docker-offline/
+ls -lh docker-offline.tar

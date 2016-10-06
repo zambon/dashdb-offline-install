@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# -e  Exit immediately if a command exits with a non-zero status.
+# -x  Print commands and their arguments as they are executed.
+set -ex
+
+# Extract files from bundle
+ls docker-offline.tar > /dev/null
+tar xvf docker-offline.tar
+
+# Setup Yum repository
+mkdir -p /var/local/yum
+mv docker-offline/docker /var/local/yum
+
+sudo tee /etc/yum.repos.d/docker.repo <<-'EOF'
+[docker]
+name=Docker
+baseurl=file:///var/local/yum/docker
+enabled=1
+gpgcheck=0
+EOF
+
+# Install Docker Engine
+sudo yum install -y docker-engine
+sudo systemctl enable docker.service
+sudo systemctl start docker
+
+# Test Docker Engine
+sudo docker load -i docker-offline/images/hello-world__latest.tgz
+sudo docker run --rm hello-world
+
+
+# Load IBM dashDB Local image
+sudo docker load -i docker-offline/images/ibmdashdb_local__latest_linux.tgz
