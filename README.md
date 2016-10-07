@@ -20,7 +20,6 @@ The Docker bundle file (`docker-offline.tar`) contains all system packages requi
 * Lab server
   * RHEL 7
   * 3.10+ kernel
-  * no internet access
   * admin access
 
 ## Obtain the Docker Bundle
