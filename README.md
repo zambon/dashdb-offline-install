@@ -180,7 +180,7 @@ Follow the instructions below. You can find detailed instructions at [https://hu
       --name=dashDB \
       -v /mnt/clusterfs:/mnt/bludata0 \
       -v /mnt/clusterfs:/mnt/blumeta0 \
-      ibmdashdb/local:latest-linux \
+      ibmdashdb/local:latest-linux
 
     docker logs -f dashDB
     ```
