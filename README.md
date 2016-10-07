@@ -193,7 +193,7 @@ Follow the instructions below. You can find detailed instructions at [https://hu
     ***********************************************************
     ```
 
-1.  Hit `ctrl-c` to exit the log and run the command below to change your password.
+1.  Hit `ctrl-c` to exit the log and run the command below to set your password.
 
     ```shell
     docker exec -it dashDB setpass <NEW_PASSWORD>

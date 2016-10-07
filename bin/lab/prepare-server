@@ -29,6 +29,5 @@ sudo systemctl start docker
 sudo docker load -i docker-offline/images/hello-world__latest.tgz
 sudo docker run --rm hello-world
 
-
 # Load IBM dashDB Local image
 sudo docker load -i docker-offline/images/ibmdashdb_local__latest_linux.tgz
